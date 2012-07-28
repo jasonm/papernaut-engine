@@ -9,4 +9,5 @@ gem 'nokogiri', '~> 1.5.5'
 group 'test' do
   gem 'vcr', '~> 2.2.4'
   gem 'webmock', '~> 1.8.8'
+  gem 'm', '~> 1.1'
 end
