@@ -1,3 +1,9 @@
 class Page < ActiveRecord::Base
-  attr_accessible :identifier, :url
+  has_many :links
+  has_many :discussions, through: :links
+
+  def identify
+    self.identifier = 'doi:whatevs'
+    save!
+  end
 end
