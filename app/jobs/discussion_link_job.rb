@@ -1,6 +1,6 @@
 class DiscussionLinkJob
-  def self.work(*args)
-    self.new(args).work
+  def self.work(url)
+    self.new(url).work
   end
 
   def initialize(url)

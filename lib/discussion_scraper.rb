@@ -21,16 +21,18 @@ class DiscussionScraper
   end
 
   def scrape_new_discussion
-    discussion = scraper.scrape(@url)
+    discussion = scraper_class.new(@url).discussion
     discussion.save
     discussion
   end
 
-  def scraper
-    scrapers.detect { |matcher, callable| callable if matcher.match(@url) }
+  def scraper_class
+    scraper_classes.each do |matcher, scraper_class|
+      return scraper_class if matcher.match(@url)
+    end
   end
 
-  def scrapers
+  def scraper_classes
     [
       [/reddit.com/, RedditScraper],
       [//, BasicScraper]
