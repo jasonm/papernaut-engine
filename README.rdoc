@@ -1,0 +1,6 @@
+# TODO: This PLoS URL doesn't resolve correctly:
+# curl -d '{"url":"http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0040503","sessionid":"2"}' --header "Content-Type: application/json" localhost:1969/web
+#
+# TODO: This has no DOI, has citation_arxiv_id
+# curl -d '{"url":"http://arxiv.org/abs/1206.6246","sessionid":"2"}' --header "Content-Type: application/json" localhost:1969/web
+

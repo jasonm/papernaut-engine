@@ -1,5 +1,5 @@
 require 'nokogiri'
-require 'open-uri'
+require 'open-uri' #TODO: change to curb for moar speed and stuff
 
 class DiscussionScraper
   def self.discussion_for_url(url)
