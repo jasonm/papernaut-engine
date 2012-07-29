@@ -13,11 +13,12 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
       assert_equal 1, Discussion.count
       assert_equal blog_url, Discussion.first.url
       assert_equal blog_url, Discussion.first.content_url
+      assert_equal [], Discussion.first.identifier_strings
     end
   end
 
   def test_scraping_reddit_discussion
-    VCR.use_cassette('reddit-xaj1v') do
+    VCR.use_cassette('reddit-xaj1v-scaffold') do
       reddit_url = 'http://www.reddit.com/r/science/comments/xaj1v/newly_discovered_scaffold_supports_turning_pain/'
       content_url = 'http://www.hopkinsmedicine.org/news/media/releases/newly_discovered_scaffold_supports_turning_pain_off'
 
@@ -29,6 +30,7 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
       assert_equal 1, Discussion.count
       assert_equal reddit_url, Discussion.first.url
       assert_equal content_url, Discussion.first.content_url
+      assert_equal [], Discussion.first.identifier_strings
     end
   end
 
@@ -43,8 +45,25 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
       assert_equal 1, Discussion.count
       assert_equal reddit_url, Discussion.first.url
       assert_equal content_url, Discussion.first.content_url
-      assert_equal 'doi:10.1016/j.cell.2012.07.009', Discussion.first.identifier
+      assert_equal ['DOI:10.1016/j.cell.2012.07.009',
+                    'ISSN:0092-8674',
+                    'URL:http://www.cell.com/abstract/S0092-8674(12)00831-8'],
+                   Discussion.first.identifier_strings
     end
   end
 
+  def test_arxiv_identification_of_directly_linked_content
+    VCR.use_cassette('reddit-xajlk-silicene') do
+      reddit_url = 'http://www.reddit.com/r/science/comments/xajlk/silicene_on_crystalline_silver_a_silicon_analogue/'
+      content_url = 'http://arxiv.org/abs/1206.6246'
+
+      post '/discussions', :url => reddit_url
+      assert_equal 201, status
+
+      assert_equal 1, Discussion.count
+      assert_equal reddit_url, Discussion.first.url
+      assert_equal content_url, Discussion.first.content_url
+      assert_equal ['URL:http://arxiv.org/abs/1206.6246'], Discussion.first.identifier_strings
+    end
+  end
 end

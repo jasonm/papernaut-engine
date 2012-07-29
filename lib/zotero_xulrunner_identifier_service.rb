@@ -6,34 +6,54 @@ class ZoteroXulrunnerIdentifierService
     @endpoint_url = endpoint_url
   end
 
-  def identify(page_url)
-    response = request(page_url)
-    get_identifier(response)
+  def identifiers(page_url)
+    ZoteroXulrunnerIdentificationRequest.new(@endpoint_url, page_url).identifiers
+  end
+end
+
+class ZoteroXulrunnerIdentificationRequest
+  def initialize(endpoint_url, page_url)
+    @endpoint_url = endpoint_url
+    @page_url = page_url
+  end
+
+  def identifiers
+    if success?
+      [identifier_for('DOI'), identifier_for('ISSN'), identifier_for('url')].compact
+    else
+      []
+    end
   end
 
   private
 
-  def request(page_url)
-    request_json = {
-      url: page_url,
-      sessionid: "session-for-#{page_url}"
-    }.to_json
-
-    Curl::Easy.http_post(endpoint_web_url, request_json) { |curl|
-      curl.headers["Content-Type"] = "application/json"
-    }
+  def response
+    @response ||= begin
+      Curl::Easy.http_post(url, body) do |curl|
+        curl.headers["Content-Type"] = "application/json"
+      end
+    end
   end
 
-  def endpoint_web_url
+  def url
     "#{@endpoint_url}/web"
   end
 
-  def get_identifier(response)
-    if (200..299).include?(response.response_code)
-      items = JSON.parse(response.body_str)
-      'doi:' + items[0]["DOI"]
-    else
-      ''
+  def body
+    { url: @page_url, sessionid: @page_url }.to_json
+  end
+
+  def success?
+    (200..299).include?(response.response_code)
+  end
+
+  def match
+    @match ||= JSON.parse(response.body_str)[0] || {}
+  end
+
+  def identifier_for(kind)
+    if match.has_key?(kind)
+      Identifier.new(body: "#{kind.upcase}:#{match[kind]}")
     end
   end
 end

@@ -21,9 +21,7 @@ class DiscussionScraper
   end
 
   def scrape_new_discussion
-    discussion = scraper_class.new(@url).discussion
-    discussion.save
-    discussion
+    scraper_class.new(@url).discussion.tap(&:save)
   end
 
   def scraper_class
@@ -35,41 +33,45 @@ class DiscussionScraper
   def scraper_classes
     [
       [/reddit.com/, RedditScraper],
-      [//, BasicScraper]
+      [//, BaseScraper]
     ]
   end
+end
 
-  class BasicScraper
-    def self.scrape(url)
-      new(url).discussion
-    end
-
-    def initialize(url)
-      @url = url
-    end
-
-    def discussion
-      discussion = Discussion.new
-      discussion.url = discussion_url
-      discussion.content_url = content_url
-      discussion
-    end
-
-    def discussion_url
-      @url
-    end
-
-    def content_url
-      @url
-    end
+class BaseScraper
+  def self.scrape(url)
+    new(url).discussion
   end
 
-  class RedditScraper < BasicScraper
-    def content_url
-      # http://www.reddit.com/r/science/comments/xaj1v/newly_discovered_scaffold_supports_turning_pain/
-      html = open(@url).read
-      doc = Nokogiri::HTML(html)
-      content_url = doc.css("#siteTable a.title")[0]['href']
-    end
+  attr_reader :discussion
+
+  def initialize(url)
+    @url = url
+    build_discussion
+  end
+
+  private
+
+  def build_discussion
+    @discussion = Discussion.new
+    @discussion.url = discussion_url
+    @discussion.content_page = Page.find_or_create_by_url(content_url)
+  end
+
+  def discussion_url
+    @url
+  end
+
+  def content_url
+    @url
+  end
+end
+
+class RedditScraper < BaseScraper
+  def content_url
+    # http://www.reddit.com/r/science/comments/xaj1v/newly_discovered_scaffold_supports_turning_pain/
+    html = open(@url).read
+    doc = Nokogiri::HTML(html)
+    content_url = doc.css("#siteTable a.title")[0]['href']
   end
 end

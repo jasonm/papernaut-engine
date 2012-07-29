@@ -3,4 +3,6 @@
 #
 # TODO: This has no DOI, has citation_arxiv_id
 # curl -d '{"url":"http://arxiv.org/abs/1206.6246","sessionid":"2"}' --header "Content-Type: application/json" localhost:1969/web
+# curl -d '{"url":"http://www.cell.com/retrieve/pii/S0092867412008318","sessionid":"2"}' --header "Content-Type: application/json" localhost:1969/web
+# 
 
