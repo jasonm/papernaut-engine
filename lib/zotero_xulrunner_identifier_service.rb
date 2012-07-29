@@ -7,13 +7,13 @@ class ZoteroXulrunnerIdentifierService
   end
 
   def identify(page_url)
-    response = send_request(page_url)
+    response = request(page_url)
     get_identifier(response)
   end
 
   private
 
-  def send_request(page_url)
+  def request(page_url)
     request_json = {
       url: page_url,
       sessionid: "session-for-#{page_url}"
@@ -21,9 +21,7 @@ class ZoteroXulrunnerIdentifierService
 
     Curl::Easy.http_post(endpoint_web_url, request_json) { |curl|
       curl.headers["Content-Type"] = "application/json"
-    }.body_str
-
-    # curl -d '{"url":"http://www.neurology.org/content/62/1/60.short","sessionid":"2"}' --header "Content-Type: application/json" localhost:1969/web
+    }
   end
 
   def endpoint_web_url
@@ -31,7 +29,11 @@ class ZoteroXulrunnerIdentifierService
   end
 
   def get_identifier(response)
-    items = JSON.parse(response)
-    'doi:' + items[0]["DOI"]
+    if (200..299).include?(response.response_code)
+      items = JSON.parse(response.body_str)
+      'doi:' + items[0]["DOI"]
+    else
+      ''
+    end
   end
 end
