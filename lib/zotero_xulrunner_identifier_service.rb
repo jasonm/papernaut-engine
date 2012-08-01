@@ -57,6 +57,7 @@ class ZoteroXulrunnerIdentificationRequest
     @match ||= JSON.parse(response.body_str)[0] || {}
   end
 
+  #TODO: canonicalize URL (trailing slash, url params, hash, etc.)
   def identifier_for(kind)
     if match.has_key?(kind)
       Identifier.new(body: "#{kind.upcase}:#{match[kind]}")

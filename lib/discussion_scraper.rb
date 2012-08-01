@@ -10,6 +10,8 @@ class DiscussionScraper
     @url = url
   end
 
+  # TODO: remove #existing_discussion as well as the #save in scrape_new_discussion to eliminate I/O?
+  # have to move the ||-logic up
   def discussion
     existing_discussion || scrape_new_discussion
   end
