@@ -5,6 +5,9 @@ gem 'pg'
 gem 'nokogiri', '~> 1.5.5'
 gem 'curb', '~> 0.8.1'
 
+# just for Loaders
+gem 'feedzirra', '0.2.0.rc2'
+
 # gem 'debugger'
 
 group 'test' do
