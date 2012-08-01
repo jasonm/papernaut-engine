@@ -81,4 +81,6 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
                     Discussion.first.identifier_strings
     end
   end
+
+  # TODO: test 1-level deep spidering eg http://www.bbc.co.uk/news/science-environment-19069560 -> http://www.pnas.org/content/early/2012/07/23/1204213109.abstract?sid=966d5de8-cc5f-452d-8abc-d5fd2d4ac607
 end

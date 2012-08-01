@@ -58,6 +58,7 @@ class ZoteroXulrunnerIdentificationRequest
   end
 
   #TODO: canonicalize URL (trailing slash, url params, hash, etc.)
+  #TODO: some pages have multiple ISSN (e.g. print vs online http://www.sciencemag.org/content/336/6079/348) -- handle here or in translators lib?
   def identifier_for(kind)
     if match.has_key?(kind)
       Identifier.new(body: "#{kind.upcase}:#{match[kind]}")
