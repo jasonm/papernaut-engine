@@ -66,4 +66,19 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
       assert_equal ['URL:http://arxiv.org/abs/1206.6246'], Discussion.first.identifier_strings
     end
   end
+
+  def test_pmid_and_pmcid_identification
+    VCR.use_cassette('ncbi-PMC2377243') do
+      url = 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2377243/'
+
+      post '/discussions', :url => url
+
+      assert_equal ['DOI:10.1186/1465-9921-9-37',
+                    'ISSN:1465-9921',
+                    'URL:http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2377243/',
+                    'PMID:18439301',
+                    'PMCID:PMC2377243'],
+                    Discussion.first.identifier_strings
+    end
+  end
 end

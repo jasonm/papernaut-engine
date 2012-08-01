@@ -19,7 +19,13 @@ class ZoteroXulrunnerIdentificationRequest
 
   def identifiers
     if success?
-      [identifier_for('DOI'), identifier_for('ISSN'), identifier_for('url')].compact
+      [
+        identifier_for('DOI'),
+        identifier_for('ISSN'),
+        identifier_for('url'),
+        extra_identifier_for('PMID'),
+        extra_identifier_for('PMCID')
+      ].compact
     else
       []
     end
@@ -54,6 +60,18 @@ class ZoteroXulrunnerIdentificationRequest
   def identifier_for(kind)
     if match.has_key?(kind)
       Identifier.new(body: "#{kind.upcase}:#{match[kind]}")
+    end
+  end
+
+  def extra_identifier_for(kind)
+    if match.has_key?("extra")
+      match["extra"].split("\n").each do |line|
+        if line =~ /^#{kind}: (.*)$/
+          return Identifier.new(body: "#{kind}:#{$1}")
+        end
+      end
+
+      nil
     end
   end
 end
