@@ -9,11 +9,8 @@ VCR.configure do |c|
 end
 
 class ActiveSupport::TestCase
-  # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
-  #
-  # Note: You'll currently still have to declare fixtures explicitly in integration tests
-  # -- they do not yet inherit this setting
+  #TODO: Remove fixtures
   fixtures :all
 
-  # Add more helper methods to be used by all tests here...
+  include FactoryGirl::Syntax::Methods
 end

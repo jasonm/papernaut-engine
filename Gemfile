@@ -14,4 +14,5 @@ group 'test' do
   gem 'vcr', '~> 2.2.4'
   gem 'webmock', '~> 1.8.8'
   gem 'm', '~> 1.1'
+  gem 'factory_girl_rails'
 end

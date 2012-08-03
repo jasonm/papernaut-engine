@@ -34,6 +34,11 @@ GEM
     crack (0.3.1)
     curb (0.8.1)
     erubis (2.7.0)
+    factory_girl (3.5.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (3.5.0)
+      factory_girl (~> 3.5.0)
+      railties (>= 3.0.0)
     feedzirra (0.2.0.rc2)
       curb (~> 0.8.0)
       gorillib (~> 0.1.9)
@@ -112,6 +117,7 @@ PLATFORMS
 
 DEPENDENCIES
   curb (~> 0.8.1)
+  factory_girl_rails
   feedzirra (= 0.2.0.rc2)
   m (~> 1.1)
   nokogiri (~> 1.5.5)

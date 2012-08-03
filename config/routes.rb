@@ -1,3 +1,3 @@
 Journalclub::Application.routes.draw do
-  resources :discussions, only: %w(create)
+  resources :discussions, only: %w(index create)
 end

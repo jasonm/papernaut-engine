@@ -35,6 +35,12 @@ class PageTest < ActiveSupport::TestCase
     assert_equal [@c], @c.page_tree
   end
 
+  def test_has_many_discussions
+    page = create(:page)
+    discussion = create(:discussion, content_page: page)
+    assert_equal [discussion], page.reload.discussions
+  end
+
   def make_page(url)
     page = Page.new
     page.url = url

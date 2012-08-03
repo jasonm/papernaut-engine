@@ -15,6 +15,10 @@ class Discussion < ActiveRecord::Base
     content_page.url
   end
 
+  def self.identified_by(identifier_substring)
+    joins(content_page: :identifiers).where("identifiers.body LIKE ?", "%#{identifier_substring}%")
+  end
+
   private
 
   def spider
