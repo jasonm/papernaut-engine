@@ -8,14 +8,24 @@
 #
 # Issue: this should use PubMed\ Central.js, but that translator isn't marked as "v" (server) compatible in the repo
 # curl -d '{"url":"http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2377243/","sessionid":"2"}' --header "Content-Type: application/json" localhost:1969/web
-# 
-
 
 https://github.com/zotero/translation-server/blob/7e21e119cf51241a97417aa8f94ec35721f10058/src/zotero.js#L51
 https://gist.github.com/3202704
 
-P.S. In digging around, I noticed a "b" browser, which is bookmarklet, as Simon introduced in June - https://groups.google.com/d/topic/zotero-dev/ZWCe86B3OCw/discussion
-
 PMCjs failure, but no issue filed:
 http://zotero-translator-tests.s3-website-us-east-1.amazonaws.com/testTranslators.html#date=2012-07-29&browser=v&version=3.0.SOURCE.cb7640a
 
+things I could do:
+  x build discussion-query API
+  _ build a zotero oauth frontend.
+  _ build a mendeley frontend.
+  _ build more loaders
+  _ build rss/superfeedr loaders
+  _ optimize, build bulk-identifier query API
+  _ fix discussions API (RemoteJournalClub)
+  _ reddit archive loader http://reddit.com/r/[subreddit].[rss/json]?limit=[limit]&after=[after]
+  _ hackernews archive loader [~] curl http://api.ihackernews.com/new/s4MVPmPI3d|jsonpp
+  _ queue-ify the discussions API.
+  _ multiplex the identifier worker.  Not needed: already threaded.
+  _ get it deployable.
+  _ work on TODOs (canonicalize URLs, refactor, spider>0, etc)
