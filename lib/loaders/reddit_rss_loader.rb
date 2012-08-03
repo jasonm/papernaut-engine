@@ -24,7 +24,9 @@ module Loaders
     end
 
     def feed
-      @feed ||= Feedzirra::Feed.fetch_and_parse(feed_url)
+      @feed ||= Feedzirra::Feed.fetch_and_parse(feed_url, {
+        user_agent: "JournalClub RedditRssLoader by /u/jayunit"
+      })
     end
 
     def feed_url
