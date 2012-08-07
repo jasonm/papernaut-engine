@@ -27,6 +27,23 @@ class ZoteroXulrunnerIdentificationRequest
         extra_identifier_for('PMCID')
       ].compact
     else
+      # TODO: Handle HTTP 300 Multiple Choices:
+      #
+      # http://ehp03.niehs.nih.gov/article/info%3Adoi%2F10.1289%2Fehp.120-a305
+      #
+      # gives response from translation server
+      #
+      # zotero(5)(+0000001): HTTP/1.0 300 Multiple Choices
+      # Content-Type: application/json
+      # {"10.1289/ehp.120-a305":"Purifying Drinking Water with Sun, Salt, and Limes","10.2166/washdev.2012.043":"Optimizing the solar water disinfection (SODIS) method by decreasing turbidity with NaCl"}
+
+
+      # TODO: Fixup 501 Method Not Implemented ones like
+      # http://www.reddit.com/r/science/comments/xsmc0/alzheimers_protein_could_be_used_to_reverse_the/
+      # which links to
+      # http://www.sciencenews.org/view/generic/id/342721/title/Alzheimer%E2%80%99s_protein_could_help_in_MS
+      # which is identifiable in browser, but not in server :(
+
       []
     end
   end
