@@ -57,7 +57,7 @@ class BaseScraper
   def build_discussion
     @discussion = Discussion.new
     @discussion.url = discussion_url
-    @discussion.content_page = Page.find_or_create_by_url(content_url)
+    @discussion.pages = [Page.find_or_create_by_url(content_url)]
   end
 
   def discussion_url

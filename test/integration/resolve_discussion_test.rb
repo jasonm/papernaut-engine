@@ -47,8 +47,8 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
       assert_equal [content_url], discussion.page_urls
       assert_equal ['DOI:10.1016/j.cell.2012.07.009',
                     'ISSN:0092-8674',
-                    'URL:http://www.cell.com/abstract/S0092-8674(12)00831-8'],
-                   discussion.identifier_strings
+                    'URL:http://www.cell.com/abstract/S0092-8674(12)00831-8'].sort,
+                   discussion.identifier_strings.sort
     end
   end
 
@@ -78,8 +78,8 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
                     'ISSN:1465-9921',
                     'URL:http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2377243/',
                     'PMID:18439301',
-                    'PMCID:PMC2377243'],
-                    discussion.identifier_strings
+                    'PMCID:PMC2377243'].sort,
+                    discussion.identifier_strings.sort
     end
   end
 

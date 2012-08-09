@@ -5,6 +5,7 @@ require 'feedzirra'
 
 module Loaders
   class RedditRssLoader
+    # def initialize(subreddit_name, limit=100, journal_club_api=LocalJournalClub.new)
     def initialize(journal_club_api, subreddit_name, limit = 3)
       @journal_club_api = journal_club_api
       @subreddit_name = subreddit_name
@@ -47,3 +48,8 @@ end
 #   loader = Loaders::RedditRssLoader.new(journal_club, ENV['SUBREDDIT_NAME'], limit)
 #   loader.load
 # end
+#
+# url param &limit is maxed at 100 https://github.com/reddit/reddit/wiki/API
+# So, to paginate:
+# http://reddit.com/r/[subreddit].[rss/json]?limit=[limit]&after=[after]
+# e.g. http://www.reddit.com/r/science/?count=25&after=t3_xw9wx

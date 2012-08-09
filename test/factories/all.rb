@@ -7,4 +7,7 @@ FactoryGirl.define do
 
   factory :identifier do
   end
+
+  factory :link do
+  end
 end

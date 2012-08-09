@@ -9,7 +9,7 @@ class QueryForDiscussionsTest < ActionDispatch::IntegrationTest
 
   def test_querying_for_single_identifier
     page = create(:page)
-    discussion = create(:discussion, content_page: page)
+    discussion = create(:discussion, pages: [page])
     identifier = create(:identifier, page: page, body: "PREFIX:the-paper")
 
     get '/discussions.json', { query: 'the-paper' }
