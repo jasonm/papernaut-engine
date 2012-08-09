@@ -4,9 +4,4 @@ class DiscussionsController < ApplicationController
   def index
     respond_with Discussion.identified_by(params['query'])
   end
-
-  def create
-    DiscussionLinkJob.work(params['url'])
-    head :created
-  end
 end

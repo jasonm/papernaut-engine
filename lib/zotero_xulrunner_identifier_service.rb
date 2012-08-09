@@ -2,11 +2,13 @@ require 'json'
 require 'curb'
 
 class ZoteroXulrunnerIdentifierService
-  def initialize(endpoint_url)
+  def initialize(endpoint_url, logger = Logger.new(STDOUT))
     @endpoint_url = endpoint_url
+    @logger = logger
   end
 
   def identifiers(page_url)
+    @logger.debug("ZoteroXulrunnerIdentifierService: identifying #{page_url}")
     ZoteroXulrunnerIdentificationRequest.new(@endpoint_url, page_url).identifiers
   end
 end
@@ -27,23 +29,6 @@ class ZoteroXulrunnerIdentificationRequest
         extra_identifier_for('PMCID')
       ].compact
     else
-      # TODO: Handle HTTP 300 Multiple Choices:
-      #
-      # http://ehp03.niehs.nih.gov/article/info%3Adoi%2F10.1289%2Fehp.120-a305
-      #
-      # gives response from translation server
-      #
-      # zotero(5)(+0000001): HTTP/1.0 300 Multiple Choices
-      # Content-Type: application/json
-      # {"10.1289/ehp.120-a305":"Purifying Drinking Water with Sun, Salt, and Limes","10.2166/washdev.2012.043":"Optimizing the solar water disinfection (SODIS) method by decreasing turbidity with NaCl"}
-
-
-      # TODO: Fixup 501 Method Not Implemented ones like
-      # http://www.reddit.com/r/science/comments/xsmc0/alzheimers_protein_could_be_used_to_reverse_the/
-      # which links to
-      # http://www.sciencenews.org/view/generic/id/342721/title/Alzheimer%E2%80%99s_protein_could_help_in_MS
-      # which is identifiable in browser, but not in server :(
-
       []
     end
   end
@@ -74,8 +59,6 @@ class ZoteroXulrunnerIdentificationRequest
     @match ||= JSON.parse(response.body_str)[0] || {}
   end
 
-  #TODO: canonicalize URL (trailing slash, url params, hash, etc.)
-  #TODO: some pages have multiple ISSN (e.g. print vs online http://www.sciencemag.org/content/336/6079/348) -- handle here or in translators lib?
   def identifier_for(kind)
     if match.has_key?(kind)
       Identifier.new(body: "#{kind.upcase}:#{match[kind]}")

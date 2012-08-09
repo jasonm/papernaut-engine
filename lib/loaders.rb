@@ -1,1 +1,4 @@
-require_relative 'loaders/reddit_rss_loader'
+module Loaders
+  mattr_accessor :logger
+  self.logger = Rails.logger
+end

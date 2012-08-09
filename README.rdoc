@@ -43,12 +43,28 @@ things I could do:
   _ reddit archive loader http://reddit.com/r/[subreddit].[rss/json]?limit=[limit]&after=[after]
   _ hackernews archive loader [~] curl http://api.ihackernews.com/new/s4MVPmPI3d|jsonpp
   _ queue-ify the discussions API.
-  _ multiplex the identifier worker.  Not needed: already threaded.
+  x multiplex the identifier worker.  Not needed: already threaded.
   _ get it deployable.
   _ handle HTTP 300 Multiple Choice responses from translation server
+      # TODO: Handle HTTP 300 Multiple Choices:
+      #
+      # http://ehp03.niehs.nih.gov/article/info%3Adoi%2F10.1289%2Fehp.120-a305
+      #
+      # gives response from translation server
+      #
+      # zotero(5)(+0000001): HTTP/1.0 300 Multiple Choices
+      # Content-Type: application/json
+      # {"10.1289/ehp.120-a305":"Purifying Drinking Water with Sun, Salt, and Limes","10.2166/washdev.2012.043":"Optimizing the solar water disinfection (SODIS) method by decreasing turbidity with NaCl"}
   _ fixup some HTTP 501 Not Implemented responses from translation server (presumably from non-[server] translators)
-  _ work on TODOs (canonicalize URLs, refactor, spider>0, etc)
+      # TODO: Fixup 501 Method Not Implemented ones like
+      # http://www.reddit.com/r/science/comments/xsmc0/alzheimers_protein_could_be_used_to_reverse_the/
+      # which links to
+      # http://www.sciencenews.org/view/generic/id/342721/title/Alzheimer%E2%80%99s_protein_could_help_in_MS
+      # which is identifiable in browser, but not in server :(
+  _ canonicalize URL:... identifiers (trailing slash, url params, hash, etc.) in ZoteroXulrunnerIdentificationRequest#identifier_for
+  _ handle multiple ISSN in ZoteroXulrunnerIdentificationRequest#identifier_for
   _ add an engine status page
+  _ make use of reddit 'duplicates' http://www.reddit.com/r/science/duplicates/xx0xg/anthropologists_have_discovered_three_human/ for well-identified discussions?
 
 sources:
   http://scienceblogs.com/catdynamics/2012/07/26/lhc-higgs-mass-vs-susy/

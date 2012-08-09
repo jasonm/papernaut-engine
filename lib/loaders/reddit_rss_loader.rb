@@ -1,55 +1,87 @@
-#!/usr/bin/env /Users/jason/dev/zotero/journalclub/script/rails runner
-#TODO: how to make that ^ path relative?
-
 require 'feedzirra'
 
 module Loaders
   class RedditRssLoader
-    # def initialize(subreddit_name, limit=100, journal_club_api=LocalJournalClub.new)
-    def initialize(journal_club_api, subreddit_name, limit = 3)
-      @journal_club_api = journal_club_api
+    DEFAULT_MAX_PAGES = 2
+    DEFAULT_PER_PAGE = 5
+    REDDIT_PREFIX_FOR_LINK = 't3_'
+    REDDIT_POLITE_REQUEST_INTERVAL_SECONDS = 2
+
+    def initialize(subreddit_name, max_pages = DEFAULT_MAX_PAGES, per_page = DEFAULT_PER_PAGE)
       @subreddit_name = subreddit_name
-      @limit = limit
+      @max_pages = max_pages
+      @per_page = per_page
     end
 
     def load
-      discussion_urls.each do |discussion_url|
-        @journal_club_api.create_discussion(discussion_url)
+      each_feed_page do |page|
+        page.entries.each do |entry|
+          RedditRssEntry.new(entry).load
+        end
+      end
+    end
+
+    def each_feed_page
+      page_number = 0
+      url = feed_url
+
+      loop do
+        page_number += 1
+        feed_page = fetch_and_parse(url)
+        yield feed_page
+        url = next_page_url(feed_page)
+        break if url.nil? || page_number == @max_pages
+        sleep REDDIT_POLITE_REQUEST_INTERVAL_SECONDS
       end
     end
 
     private
 
-    def discussion_urls
-      feed.entries.map(&:entry_id)
+    def next_page_url(feed)
+      last_entry = feed.entries.last
+
+      if last_entry
+        last_entry.url =~ %r{/comments/([^/]*)/}
+        last_reddit_item_identifier = $1
+        feed_url(last_reddit_item_identifier)
+      end
     end
 
-    def feed
-      @feed ||= Feedzirra::Feed.fetch_and_parse(feed_url, {
-        user_agent: "JournalClub RedditRssLoader by /u/jayunit"
-      })
+    def fetch_and_parse(url)
+      Loaders.logger.debug("RedditRssLoader fetching #{url}")
+
+      # Can't use Feedzirra::Feed.fetch_and_parse directly because webmock can't fake Curb::Multi
+      xml = Curl.get(url) do |http|
+        http.headers['User-Agent'] = 'JournalClub RedditRssLoader by /u/jayunit'
+      end.body_str
+
+      Feedzirra::Feed.parse(xml)
     end
 
-    def feed_url
-      "http://www.reddit.com/r/#{@subreddit_name}.rss?limit=#{@limit}"
+    def feed_url(after=nil)
+      "http://www.reddit.com/r/#{@subreddit_name}.rss?limit=#{@per_page}&after=#{REDDIT_PREFIX_FOR_LINK}#{after}"
     end
-  end
 
-  def self.load_reddit_rss(subreddit_name)
-    journal_club = LocalJournalClub.new
-    loader = Loaders::RedditRssLoader.new(journal_club, subreddit_name, 100)
-    loader.load
+    class RedditRssEntry
+      def initialize(entry)
+        @entry = entry
+      end
+
+      def load
+        IdentifyDiscussionJob.new(discussion_url, [content_url]).work
+      end
+
+      private
+
+      def discussion_url
+        @entry.url
+      end
+
+      def content_url
+        summary_links = Nokogiri::HTML.parse(@entry.summary).css('a')
+        link_tag = summary_links.detect { |tag| tag.text == '[link]' }
+        link_tag['href']
+      end
+    end
   end
 end
-
-# if __FILE__ == $0
-#   journal_club = LocalJournalClub.new # RemoteJournalClub.new(ENV['JOURNAL_CLUB_URL'])
-#   limit = 20
-#   loader = Loaders::RedditRssLoader.new(journal_club, ENV['SUBREDDIT_NAME'], limit)
-#   loader.load
-# end
-#
-# url param &limit is maxed at 100 https://github.com/reddit/reddit/wiki/API
-# So, to paginate:
-# http://reddit.com/r/[subreddit].[rss/json]?limit=[limit]&after=[after]
-# e.g. http://www.reddit.com/r/science/?count=25&after=t3_xw9wx

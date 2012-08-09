@@ -3,6 +3,8 @@ class Discussion < ActiveRecord::Base
   has_many :pages, through: :links
   has_many :identifiers, through: :pages
 
+  attr_accessible :url, :pages
+
   # Eventually, Discussion has kind (blog/hn/reddit/nyt/etc), #/comments, author, activity, etc., for display
 
   def link
