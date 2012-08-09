@@ -68,7 +68,12 @@ module Loaders
       end
 
       def load
-        IdentifyDiscussionJob.new(discussion_url, [content_url]).work
+        begin
+          IdentifyDiscussionJob.new(discussion_url, [content_url]).work
+        rescue Exception => e
+          exception_presentation = "#{e.class} (#{e.message}):\n    " + e.backtrace.join("\n    ") + "\n\n"
+          Loaders.logger.error("RedditRssLoader could not load discussion #{discussion_url}:\n#{exception_presentation}")
+        end
       end
 
       private
