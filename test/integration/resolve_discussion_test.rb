@@ -12,7 +12,7 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
 
       discussion = Discussion.first
       assert_equal blog_url, discussion.url
-      assert_equal blog_url, discussion.content_url
+      assert_equal [blog_url], discussion.page_urls
       assert_equal [], discussion.identifier_strings
     end
   end
@@ -29,7 +29,7 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
 
       discussion = Discussion.first
       assert_equal reddit_url, discussion.url
-      assert_equal content_url, discussion.content_url
+      assert_equal [content_url], discussion.page_urls
       assert_equal [], discussion.identifier_strings
     end
   end
@@ -44,7 +44,7 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
 
       discussion = Discussion.first
       assert_equal reddit_url, discussion.url
-      assert_equal content_url, discussion.content_url
+      assert_equal [content_url], discussion.page_urls
       assert_equal ['DOI:10.1016/j.cell.2012.07.009',
                     'ISSN:0092-8674',
                     'URL:http://www.cell.com/abstract/S0092-8674(12)00831-8'],
@@ -62,7 +62,7 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
 
       discussion = Discussion.first
       assert_equal reddit_url, discussion.url
-      assert_equal content_url, discussion.content_url
+      assert_equal [content_url], discussion.page_urls
       assert_equal ['URL:http://arxiv.org/abs/1206.6246'], discussion.identifier_strings
     end
   end

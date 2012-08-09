@@ -11,8 +11,8 @@ class Discussion < ActiveRecord::Base
     content_page.identifiers.map(&:body)
   end
 
-  def content_url
-    content_page.url
+  def page_urls
+    [content_page.url]
   end
 
   def self.identified_by(identifier_substring)
