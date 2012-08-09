@@ -9,20 +9,29 @@ class IdentifyDiscussionJob
     discussion.pages = pages
     discussion.save!
 
-    pages.each do |page|
-      Thread.new do
-        begin
-          page.identify
-        ensure
-          ActiveRecord::Base.connection.close
-        end
-      end
-    end
+    identify_pages_in_background
   end
 
   private
 
+  def identify_pages_in_background
+    pages.each do |page|
+      in_thread { page.identify }
+    end
+  end
+
   def pages
     @page_urls.map { |url| Page.find_by_url(url) || Page.new(url: url) }
+  end
+
+  def in_thread
+    Thread.new do
+      begin
+        yield
+      ensure
+        ActiveRecord::Base.connection.close
+        Rails.logger.flush
+      end
+    end
   end
 end
