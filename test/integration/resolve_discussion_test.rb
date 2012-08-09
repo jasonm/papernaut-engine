@@ -10,10 +10,10 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
       post '/discussions', :url => blog_url
       assert_equal 201, status
 
-      assert_equal 1, Discussion.count
-      assert_equal blog_url, Discussion.first.url
-      assert_equal blog_url, Discussion.first.content_url
-      assert_equal [], Discussion.first.identifier_strings
+      discussion = Discussion.first
+      assert_equal blog_url, discussion.url
+      assert_equal blog_url, discussion.content_url
+      assert_equal [], discussion.identifier_strings
     end
   end
 
@@ -27,10 +27,10 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
       post '/discussions', :url => reddit_url
       assert_equal 201, status
 
-      assert_equal 1, Discussion.count
-      assert_equal reddit_url, Discussion.first.url
-      assert_equal content_url, Discussion.first.content_url
-      assert_equal [], Discussion.first.identifier_strings
+      discussion = Discussion.first
+      assert_equal reddit_url, discussion.url
+      assert_equal content_url, discussion.content_url
+      assert_equal [], discussion.identifier_strings
     end
   end
 
@@ -42,13 +42,13 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
       post '/discussions', :url => reddit_url
       assert_equal 201, status
 
-      assert_equal 1, Discussion.count
-      assert_equal reddit_url, Discussion.first.url
-      assert_equal content_url, Discussion.first.content_url
+      discussion = Discussion.first
+      assert_equal reddit_url, discussion.url
+      assert_equal content_url, discussion.content_url
       assert_equal ['DOI:10.1016/j.cell.2012.07.009',
                     'ISSN:0092-8674',
                     'URL:http://www.cell.com/abstract/S0092-8674(12)00831-8'],
-                   Discussion.first.identifier_strings
+                   discussion.identifier_strings
     end
   end
 
@@ -60,10 +60,10 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
       post '/discussions', :url => reddit_url
       assert_equal 201, status
 
-      assert_equal 1, Discussion.count
-      assert_equal reddit_url, Discussion.first.url
-      assert_equal content_url, Discussion.first.content_url
-      assert_equal ['URL:http://arxiv.org/abs/1206.6246'], Discussion.first.identifier_strings
+      discussion = Discussion.first
+      assert_equal reddit_url, discussion.url
+      assert_equal content_url, discussion.content_url
+      assert_equal ['URL:http://arxiv.org/abs/1206.6246'], discussion.identifier_strings
     end
   end
 
@@ -73,12 +73,13 @@ class ResolveDiscussionTest < ActionDispatch::IntegrationTest
 
       post '/discussions', :url => url
 
+      discussion = Discussion.first
       assert_equal ['DOI:10.1186/1465-9921-9-37',
                     'ISSN:1465-9921',
                     'URL:http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2377243/',
                     'PMID:18439301',
                     'PMCID:PMC2377243'],
-                    Discussion.first.identifier_strings
+                    discussion.identifier_strings
     end
   end
 
