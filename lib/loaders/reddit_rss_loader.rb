@@ -43,6 +43,7 @@ end
 
 # if __FILE__ == $0
 #   journal_club = LocalJournalClub.new # RemoteJournalClub.new(ENV['JOURNAL_CLUB_URL'])
-#   loader = Loaders::RedditRssLoader.new(journal_club, ENV['SUBREDDIT_NAME'])
+#   limit = 20
+#   loader = Loaders::RedditRssLoader.new(journal_club, ENV['SUBREDDIT_NAME'], limit)
 #   loader.load
 # end

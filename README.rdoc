@@ -1,3 +1,7 @@
+!!!!!
+Dev notes: ~/log/2012-07-23-journal-club
+!!!!!
+
 # TODO: This PLoS URL doesn't resolve correctly:
 # curl -d '{"url":"http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0040503","sessionid":"2"}' --header "Content-Type: application/json" localhost:1969/web
 #
@@ -17,15 +21,34 @@ http://zotero-translator-tests.s3-website-us-east-1.amazonaws.com/testTranslator
 
 things I could do:
   x build discussion-query API
-  _ build a zotero oauth frontend.
-  _ build a mendeley frontend.
+  x spike a zotero oauth frontend.
+  _ load researchblogging -- odd disconnect between citations - present in RB's html and atom, but is it always on the dest. page?
+    also, how to paginate Atom feeds?
+    this also involves redesigning the Discussion/content_page/Page/Identifier structure
+      Just Discussion has_many Identifiers, and Page is transient during parse process.
+
+      http://researchblogging.org/post-list/list/date/all?&offset=160 #(20*n)
+      $('.articleContent').length // 20
+      $('.articleContent h1 a[href]') // discussion researchblogging URL
+      $('.articleContent h1 a[title]') // discussion target URL
+      $('.articleContent .articleBox a[href]') // identifier URLs
+
+  _ sketch designs for the frontend
+  _ spike a mendeley frontend.
   _ build more loaders
   _ build rss/superfeedr loaders
   _ optimize, build bulk-identifier query API
   _ fix discussions API (RemoteJournalClub)
+  _ pull title in backend
   _ reddit archive loader http://reddit.com/r/[subreddit].[rss/json]?limit=[limit]&after=[after]
   _ hackernews archive loader [~] curl http://api.ihackernews.com/new/s4MVPmPI3d|jsonpp
   _ queue-ify the discussions API.
   _ multiplex the identifier worker.  Not needed: already threaded.
   _ get it deployable.
+  _ handle HTTP 300 Multiple Choice responses from translation server
+  _ fixup some HTTP 501 Not Implemented responses from translation server (presumably from non-[server] translators)
   _ work on TODOs (canonicalize URLs, refactor, spider>0, etc)
+  _ add an engine status page
+
+sources:
+  http://scienceblogs.com/catdynamics/2012/07/26/lhc-higgs-mass-vs-susy/
