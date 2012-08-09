@@ -27,7 +27,7 @@ class Discussion < ActiveRecord::Base
   end
 
   def identify_linked_pages
-    content_page.page_tree.each(&:identify)
+    content_page.identify
   end
 end
 
