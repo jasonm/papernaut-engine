@@ -22,29 +22,11 @@ http://zotero-translator-tests.s3-website-us-east-1.amazonaws.com/testTranslator
 things I could do:
   x build discussion-query API
   x spike a zotero oauth frontend.
-  _ load researchblogging -- odd disconnect between citations - present in RB's html and atom, but is it always on the dest. page?
-    also, how to paginate Atom feeds?
-    this also involves redesigning the Discussion/content_page/Page/Identifier structure
-      Just Discussion has_many Identifiers, and Page is transient during parse process.
+  x load researchblogging -- odd disconnect between citations - present in RB's html and atom, but is it always on the dest. page?
 
-      http://researchblogging.org/post-list/list/date/all?&offset=160 #(20*n)
-      $('.articleContent').length // 20
-      $('.articleContent h1 a[href]') // discussion researchblogging URL
-      $('.articleContent h1 a[title]') // discussion target URL
-      $('.articleContent .articleBox a[href]') // identifier URLs
-
-  _ sketch designs for the frontend
-  _ spike a mendeley frontend.
-  _ build more loaders
-  _ build rss/superfeedr loaders
-  _ optimize, build bulk-identifier query API
-  _ fix discussions API (RemoteJournalClub)
-  _ pull title in backend
-  _ reddit archive loader http://reddit.com/r/[subreddit].[rss/json]?limit=[limit]&after=[after]
-  _ hackernews archive loader [~] curl http://api.ihackernews.com/new/s4MVPmPI3d|jsonpp
-  _ queue-ify the discussions API.
-  x multiplex the identifier worker.  Not needed: already threaded.
-  _ get it deployable.
+  Correct:
+  x reddit archive loader http://reddit.com/r/[subreddit].[rss/json]?limit=[limit]&after=[after]
+  _ stop tracking ISSN
   _ handle HTTP 300 Multiple Choice responses from translation server
       # TODO: Handle HTTP 300 Multiple Choices:
       #
@@ -61,10 +43,49 @@ things I could do:
       # which links to
       # http://www.sciencenews.org/view/generic/id/342721/title/Alzheimer%E2%80%99s_protein_could_help_in_MS
       # which is identifiable in browser, but not in server :(
-  _ canonicalize URL:... identifiers (trailing slash, url params, hash, etc.) in ZoteroXulrunnerIdentificationRequest#identifier_for
-  _ handle multiple ISSN in ZoteroXulrunnerIdentificationRequest#identifier_for
+      #
+      # same for
+      # http://arstechnica.com/science/2012/08/open-air-quantum-teleportation-performed-across-a-97km-lake/
+      # discussed by http://www.reddit.com/r/science/comments/xxz59/openair_quantum_teleportation_has_been_performed/
+  _ move identification from threads to background worker
+  _ get it deployable.
+  Useful:
+  _ sketch designs for the frontend
+  _ spike a mendeley frontend.
+  _ build more loaders... what do people use?
+    http://www.scilogs.com/
+    http://scienceblogging.org/
+    http://blogs.plos.org/
+      some plos blogs use reserachblogging like:
+        http://blogs.plos.org/obesitypanacea/2012/08/09/does-thinking-hard-impact-your-heart/
+      others don't like:
+        http://blogs.plos.org/speakingofmedicine/2012/08/07/this-week-in-plos-medicine-competing-interests-mobile-hiv-clinic-maternal-health-more/
+    science20
+      http://www.science20.com/anthrophysis/unseen_coworkers_office_space_bacteria-92482
+        links to http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0037849
+  _ hackernews archive loader [~] curl http://api.ihackernews.com/new/s4MVPmPI3d|jsonpp
+  _ build rss/superfeedr loaders
+  _ log all translationserver errors for categorization & improvement
+  _ scrape discussion title
+  _ fix unicode char support in URI.parse
+    # http://stackoverflow.com/questions/9082732/how-can-i-extract-a-url-with-non-english-characters-from-a-string
+    # [13] pry(main)> uri = Addressable::URI.parse(d.url)
+    # => #<Addressable::URI:0x3fcb87f92990 URI:http://www.reddit.com/r/science/comments/xinu1/βamyloid_improves_symptoms_in_mice_with_multiple/>
+    # [14] pry(main)> uri.host
+    # => "www.reddit.com"
+  Fast:
+  _ load with Page#identified_at nil.  Then, identify separately from loading
+  _ optimize, build bulk-identifier query API, or merge apps
+  x multiplex the identifier worker.  Not needed: already threaded.
+  Nifty:
+  _ see what else people use http://en.wikipedia.org/wiki/Comparison_of_reference_management_software
+    _ import bibtex via https://rubygems.org/gems/bibtex-ruby ?
+    _ spike a Papers-SDK frontend? http://www.mekentosj.com/developer
+  _ scrape number of comments
   _ add an engine status page
   _ make use of reddit 'duplicates' http://www.reddit.com/r/science/duplicates/xx0xg/anthropologists_have_discovered_three_human/ for well-identified discussions?
+  _ canonicalize URLs... but sometimes params are necessary (e.g. ?docid=123abc)
+  _ boilerpipe to improve page spidering... but doesnt always work eg cuts off DOI at end of http://boilerpipe-web.appspot.com/extract?url=http%3A%2F%2Farstechnica.com%2Fscience%2F2012%2F08%2Fopen-air-quantum-teleportation-performed-across-a-97km-lake%2F&extractor=ArticleExtractor&output=htmlFragment
 
 sources:
   http://scienceblogs.com/catdynamics/2012/07/26/lhc-higgs-mass-vs-susy/
