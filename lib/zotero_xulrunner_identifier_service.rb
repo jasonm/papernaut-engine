@@ -23,7 +23,6 @@ class ZoteroXulrunnerIdentificationRequest
     if success?
       [
         identifier_for('DOI'),
-        identifier_for('ISSN'),
         identifier_for('url'),
         extra_identifier_for('PMID'),
         extra_identifier_for('PMCID')
