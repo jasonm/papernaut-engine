@@ -19,6 +19,15 @@ https://gist.github.com/3202704
 PMCjs failure, but no issue filed:
 http://zotero-translator-tests.s3-website-us-east-1.amazonaws.com/testTranslators.html#date=2012-07-29&browser=v&version=3.0.SOURCE.cb7640a
 
+notes:
+  Studying Scientific Discourse on the Web Using Bibliometrics: A Chemistry Blogging Case Study
+    http://journal.webscience.org/308/2/websci10_submission_48.pdf
+
+people:
+  See papers on "Road map for altmetrics" http://altmetrics.org/manifesto/
+  http://friendfeed.com/the-life-scientists
+  http://synthesis.williamgunn.org/about
+
 things I could do:
   x build discussion-query API
   x spike a zotero oauth frontend.
@@ -26,7 +35,9 @@ things I could do:
 
   Correct:
   x reddit archive loader http://reddit.com/r/[subreddit].[rss/json]?limit=[limit]&after=[after]
-  _ stop tracking ISSN
+  x stop tracking ISSN
+  _ amend current user when oauthing to 2nd service
+  _ fetch discussion titles
   _ handle HTTP 300 Multiple Choice responses from translation server
       # TODO: Handle HTTP 300 Multiple Choices:
       #
@@ -52,8 +63,10 @@ things I could do:
   Useful:
   _ sketch designs for the frontend
   _ spike a mendeley frontend.
-  _ build more loaders... what do people use?
+  _ build more loaders... what do people use? sources feeds
     http://www.scilogs.com/
+    http://www.nature.com/news/
+      e.g. http://www.nature.com/news/cancer-stem-cells-tracked-1.11087 'ol.references li p a'
     http://scienceblogging.org/
     http://blogs.plos.org/
       some plos blogs use reserachblogging like:
@@ -63,6 +76,9 @@ things I could do:
     science20
       http://www.science20.com/anthrophysis/unseen_coworkers_office_space_bacteria-92482
         links to http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0037849
+    http://seqanswers.com
+      Literature Watch forum: http://seqanswers.com/forums/forumdisplay.php?f=10&order=desc
+      Other threads will "reference" paper(s) -- should this be displayed separately from a "discussion" in JC?
   _ hackernews archive loader [~] curl http://api.ihackernews.com/new/s4MVPmPI3d|jsonpp
   _ build rss/superfeedr loaders
   _ log all translationserver errors for categorization & improvement
@@ -73,9 +89,13 @@ things I could do:
     # => #<Addressable::URI:0x3fcb87f92990 URI:http://www.reddit.com/r/science/comments/xinu1/βamyloid_improves_symptoms_in_mice_with_multiple/>
     # [14] pry(main)> uri.host
     # => "www.reddit.com"
+  _ cache name from zotero/mendeley/etc if available
+  _ fetch correct firstname/lastname from Zotero
+  Robust:
+  _ present nice error if frontend can't contact engine
   Fast:
-  _ load with Page#identified_at nil.  Then, identify separately from loading
-  _ optimize, build bulk-identifier query API, or merge apps
+  _ Separate loading from identification: load with Page#identified_at nil.  Then, identify separately
+  _ optimize, build bulk-identifier query API?
   x multiplex the identifier worker.  Not needed: already threaded.
   Nifty:
   _ see what else people use http://en.wikipedia.org/wiki/Comparison_of_reference_management_software

@@ -1,0 +1,31 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:1969/web
+    body:
+      encoding: US-ASCII
+      string: ! '{"url":"http://ehp03.niehs.nih.gov/article/info%3Adoi%2F10.1289%2Fehp.120-a305","sessionid":"http://ehp03.niehs.nih.gov/article/info%3Adoi%2F10.1289%2Fehp.120-a305"}'
+    headers:
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 300
+      message: !binary |-
+        TXVsdGlwbGUgQ2hvaWNlcw==
+    headers:
+      !binary "Q29udGVudC1UeXBl":
+      - !binary |-
+        YXBwbGljYXRpb24vanNvbg==
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyIxMC4xMjg5L2VocC4xMjAtYTMwNSI6IlB1cmlmeWluZyBEcmlua2luZyBX
+        YXRlciB3aXRoIFN1biwgU2FsdCwgYW5kIExpbWVzIiwiMTAuMjE2Ni93YXNo
+        ZGV2LjIwMTIuMDQzIjoiT3B0aW1pemluZyB0aGUgc29sYXIgd2F0ZXIgZGlz
+        aW5mZWN0aW9uIChTT0RJUykgbWV0aG9kIGJ5IGRlY3JlYXNpbmcgdHVyYmlk
+        aXR5IHdpdGggTmFDbCJ9
+    http_version: 
+  recorded_at: Fri, 10 Aug 2012 21:59:33 GMT
+recorded_with: VCR 2.2.4

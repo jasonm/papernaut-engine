@@ -5,7 +5,7 @@ class Discussion < ActiveRecord::Base
 
   attr_accessible :url, :pages
 
-  # Eventually, Discussion has kind (blog/hn/reddit/nyt/etc), #/comments, author, activity, etc., for display
+  # Eventually, Discussion has title, kind (blog/hn/reddit/nyt/etc), #/comments, author, activity, etc., for display
 
   def link
     identify_linked_pages
