@@ -1,11 +1,14 @@
+# TODO: Refactor to separate loading from identification: load with Page#identified_at nil.  Then, identify separately.  IdentifyDiscussionJob shouldnt have to create the discussion.
 class IdentifyDiscussionJob
-  def initialize(discussion_url, page_urls)
+  def initialize(discussion_url, discussion_title, page_urls)
     @discussion_url = discussion_url
+    @discussion_title = discussion_title
     @page_urls = page_urls
   end
 
   def work
     discussion = Discussion.find_or_create_by_url(@discussion_url)
+    discussion.title = @discussion_title
     discussion.pages = pages
     discussion.save!
 

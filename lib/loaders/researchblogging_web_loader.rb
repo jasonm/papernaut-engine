@@ -38,9 +38,10 @@ module Loaders
 
     def load_post(post_doc)
       discussion_url = post_doc.css('h1 a')[0]['title']
+      discussion_title = post_doc.css('h1 a')[0].text
       page_urls = post_doc.css('.articleBox a').map { |a| a['href'] }.uniq
 
-      load_discussion_and_pages(discussion_url, page_urls)
+      load_discussion_and_pages(discussion_url, discussion_title, page_urls)
     end
 
     private
@@ -60,11 +61,10 @@ module Loaders
       Nokogiri::HTML.parse(html)
     end
 
-    def load_discussion_and_pages(discussion_url, page_urls)
+    def load_discussion_and_pages(discussion_url, discussion_title, page_urls)
       begin
-        action_description = 
         Loaders.logger.debug("Going to load discussion #{discussion_url} with #{page_urls.count} pages:\n    " + page_urls.join("\n    "))
-        IdentifyDiscussionJob.new(discussion_url, page_urls).work
+        IdentifyDiscussionJob.new(discussion_url, discussion_title, page_urls).work
       rescue Exception => e
         exception_presentation = "#{e.class} (#{e.message}):\n    " + e.backtrace.join("\n    ") + "\n\n"
         Loaders.logger.error("#{self.class.name} could not load discussion #{discussion_url}:\n#{exception_presentation}")
