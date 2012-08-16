@@ -64,7 +64,7 @@ module Loaders
     def load_discussion_and_pages(discussion_url, discussion_title, page_urls)
       begin
         Loaders.logger.debug("Going to load discussion #{discussion_url} with #{page_urls.count} pages:\n    " + page_urls.join("\n    "))
-        IdentifyDiscussionJob.new(discussion_url, discussion_title, page_urls).work
+        Discussion.create(url: discussion_url, title: discussion_url, page_urls: page_urls)
       rescue Exception => e
         exception_presentation = "#{e.class} (#{e.message}):\n    " + e.backtrace.join("\n    ") + "\n\n"
         Loaders.logger.error("#{self.class.name} could not load discussion #{discussion_url}:\n#{exception_presentation}")

@@ -69,7 +69,7 @@ module Loaders
 
       def load
         begin
-          IdentifyDiscussionJob.new(discussion_url, discussion_title, [content_url]).work
+          Discussion.create(url: discussion_url, title: discussion_title, page_urls: [content_url])
         rescue Exception => e
           exception_presentation = "#{e.class} (#{e.message}):\n    " + e.backtrace.join("\n    ") + "\n\n"
           Loaders.logger.error("RedditRssLoader could not load discussion #{discussion_url}:\n#{exception_presentation}")

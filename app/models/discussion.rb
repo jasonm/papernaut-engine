@@ -3,7 +3,7 @@ class Discussion < ActiveRecord::Base
   has_many :pages, through: :links
   has_many :identifiers, through: :pages
 
-  attr_accessible :url, :pages
+  attr_accessible :url, :title, :pages, :page_urls
 
   # Eventually, Discussion has title, kind (blog/hn/reddit/nyt/etc), #/comments, author, activity, etc., for display
 
@@ -17,6 +17,10 @@ class Discussion < ActiveRecord::Base
 
   def page_urls
     pages.map(&:url)
+  end
+
+  def page_urls=(new_urls)
+    self.pages = new_urls.map { |url| Page.find_by_url(url) || Page.new(url: url) }
   end
 
   def self.identified_by(identifier_substring)
