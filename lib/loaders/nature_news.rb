@@ -71,60 +71,15 @@ module Loaders
 
     end
 
-    class EntryPage
-      def initialize(url)
-        @url = url
-      end
-
-      # TODO: DRY up as template method of sorts? superclass method?
-      def load
-        begin
-          Discussion.create(url: url, title: title, page_urls: page_urls)
-        rescue Exception => e
-          exception_presentation = "#{e.class} (#{e.message}):\n    " + e.backtrace.join("\n    ") + "\n\n"
-          Loaders.logger.error("#{self.class.name} could not load #{@url}:\n#{exception_presentation}")
-        end
-      end
-
+    class EntryPage < Loaders::Base::EntryPage
       private
 
-      def url
-        @url
+      def title_tag_selector
+        'title'
       end
 
-      def title
-        doc.css('title')[0].text
-      end
-
-      def page_urls
-        old_reference_urls + new_reference_urls
-      end
-
-      def new_reference_urls
-        doc.css('ol.references li a').map { |a| a['href'] }
-      end
-
-      def old_reference_urls
-        doc.css('ul#article-refrences li a:contains("Article")').map { |a| a['href'] }
-        #TODO: Extract non-linked content?
-        # 'ul#article-refrences li' -- older ones may be missing link href? EG:
-        #   * http://www.nature.com/news/2009/090130/full/news.2009.71.html
-        #     "Burt, R. K. et al. Lancet Neurol. Advanced online publication doi:10.1016/S1474-4422(09)70017-1 (2009)."
-      end
-
-      def doc
-        @doc ||= fetch_and_parse(@url)
-      end
-
-      #TODO: DRY up #fetch_and_parse across classes
-      def fetch_and_parse(url)
-        Loaders.logger.debug("#{self.class.name} fetching #{url}")
-
-        body = Curl.get(url) do |http|
-          http.headers['User-Agent'] = USER_AGENT
-        end.body_str
-
-        Nokogiri::HTML.parse(body)
+      def page_links_selector
+        'ol.references li a, ul#article-refrences li a:contains("Article")'
       end
     end
   end
