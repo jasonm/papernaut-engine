@@ -41,52 +41,15 @@ module Loaders
       end
     end
 
-    class EntryPage
-      def initialize(url)
-        @url = url
-      end
-
-      # TODO: DRY up as template method of sorts? superclass method?
-      def load
-        begin
-          Discussion.create(url: url, title: title, page_urls: page_urls)
-        rescue Exception => e
-          exception_presentation = "#{e.class} (#{e.message}):\n    " + e.backtrace.join("\n    ") + "\n\n"
-          Loaders.logger.error("#{self.class.name} could not load #{@url}:\n#{exception_presentation}")
-        end
-      end
-
+    class EntryPage < Loaders::Base::EntryPage
       private
 
-      def url
-        @url
+      def title_tag_selector
+        'h1#postTitle2 a'
       end
 
-      def title
-        doc.css('h1#postTitle2 a')[0].text
-      end
-
-      def page_urls
-        Loaders::OutgoingUrlFilter.new(@url, unfiltered_urls).filtered
-      end
-
-      def unfiltered_urls
-        doc.css('#singleBlogPost a').map { |a| a['href'] }
-      end
-
-      def doc
-        @doc ||= fetch_and_parse(@url)
-      end
-
-      #TODO: DRY up #fetch_and_parse across classes
-      def fetch_and_parse(url)
-        Loaders.logger.debug("#{self.class.name} fetching #{url}")
-
-        body = Curl.get(url) do |http|
-          http.headers['User-Agent'] = Loaders::USER_AGENT
-        end.body_str
-
-        Nokogiri::HTML.parse(body)
+      def page_links_selector
+        '#singleBlogPost a'
       end
     end
   end
