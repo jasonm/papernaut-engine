@@ -17,6 +17,8 @@ module Loaders
       end
     end
 
+    #TODO: Refactor, separate Loader from ArchivePage
+    #TODO: Refactor, extract common functionality from Plos loader
     class WebArchiveLoader
       DEFAULT_MAX_PAGES = 1
       EMPTY_PAGE_MESSAGE = "Sorry, but you are looking for something that isn't here."
