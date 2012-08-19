@@ -7,6 +7,7 @@ gem 'curb', '~> 0.8.1'
 
 # just for Loaders
 gem 'feedzirra', '0.2.0.rc2'
+gem 'threadpool'
 
 # gem 'debugger'
 group 'development' do
