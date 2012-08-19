@@ -7,6 +7,14 @@ class Discussion < ActiveRecord::Base
 
   # Eventually, Discussion has title, kind (blog/hn/reddit/nyt/etc), #/comments, author, activity, etc., for display
 
+  def self.load(attrs)
+    if existing = find_by_url(attrs[:url])
+      existing.update_attributes(attrs)
+    else
+      create(attrs)
+    end
+  end
+
   def link
     identify_linked_pages
   end

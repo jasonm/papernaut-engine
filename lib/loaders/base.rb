@@ -7,7 +7,7 @@ module Loaders
 
       def load
         begin
-          Discussion.create(url: url, title: title, page_urls: page_urls)
+          Discussion.load(url: url, title: title, page_urls: page_urls)
         rescue Exception => e
           exception_presentation = "#{e.class} (#{e.message}):\n    " + e.backtrace.join("\n    ") + "\n\n"
           Loaders.logger.error("#{self.class.name} could not load #{url}:\n#{exception_presentation}")
