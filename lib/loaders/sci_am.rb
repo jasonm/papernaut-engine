@@ -3,6 +3,7 @@ module Loaders
     class WebArchiveLoader
       POLITE_REQUEST_INTERVAL_SECONDS = 2
 
+      # Pages contain 30 entries.  Content exists until offset 6900 or so as of 19-Aug-2012.
       def initialize(offset)
         @offset = offset
       end
