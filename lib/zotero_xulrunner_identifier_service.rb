@@ -81,11 +81,15 @@ class ZoteroXulrunnerIdentificationRequest
     end
   end
 
+  # TODO: extract config vars somewhere
   def url_to_resolve
     @url_to_resolve ||= begin
       Curl.get(@page_url) do |http|
         # http.headers['User-Agent'] = USER_AGENT
         http.follow_location = true
+        http.max_redirects = 3
+        http.connect_timeout = 5
+        http.timeout = 5
       end.last_effective_url
     rescue
       @page_url
