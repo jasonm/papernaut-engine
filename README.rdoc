@@ -13,20 +13,25 @@ Dev notes: ~/log/2012-07-23-journal-club
 # Issue: this should use PubMed\ Central.js, but that translator isn't marked as "v" (server) compatible in the repo
 # curl -d '{"url":"http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2377243/","sessionid":"2"}' --header "Content-Type: application/json" localhost:1969/web
 
-https://github.com/zotero/translation-server/blob/7e21e119cf51241a97417aa8f94ec35721f10058/src/zotero.js#L51
-https://gist.github.com/3202704
+zotero-translator development
+  https://github.com/zotero/translation-server/blob/7e21e119cf51241a97417aa8f94ec35721f10058/src/zotero.js#L51
+  https://gist.github.com/3202704
+  PMCjs failure, but no issue filed:
+  http://zotero-translator-tests.s3-website-us-east-1.amazonaws.com/testTranslators.html#date=2012-07-29&browser=v&version=3.0.SOURCE.cb7640a
+  fix sciencedirect.com identification? http://www.sciencedirect.com/science/article/pii/0019103579900940
+  sciencemag full URLs:
+    does not return DOI:
+      http://www.sciencemag.org/content/329/5987/75.full
+    returns DOI:
+      http://www.sciencemag.org/content/329/5987/75
 
-PMCjs failure, but no issue filed:
-http://zotero-translator-tests.s3-website-us-east-1.amazonaws.com/testTranslators.html#date=2012-07-29&browser=v&version=3.0.SOURCE.cb7640a
-
-notes:
-  Studying Scientific Discourse on the Web Using Bibliometrics: A Chemistry Blogging Case Study
-    http://journal.webscience.org/308/2/websci10_submission_48.pdf
-
-people:
+people and articles:
   See papers on "Road map for altmetrics" http://altmetrics.org/manifesto/
   http://friendfeed.com/the-life-scientists
   http://synthesis.williamgunn.org/about
+  http://journal.webscience.org/308/2/websci10_submission_48.pdf
+    Studying Scientific Discourse on the Web Using Bibliometrics: A Chemistry Blogging Case Study
+  http://www.genomesunzipped.org/2011/07/why-publish-science-in-peer-reviewed-journals.php#comments
 
 things I could do:
   x build discussion-query API
@@ -36,88 +41,14 @@ things I could do:
   x stop tracking ISSN
   x amend current user when oauthing to 2nd service
   x fetch discussion titles
-  _ Separate loading from identification: load with Page#identified_at nil.  Then, identify separately.  This will also be a good refactoring for IdentifyDiscussionJob, which shouldnt have to create the discussion.  Identification can spider at-will.
-  _ move identification to background worker
-  _ get it deployable.
-    * heroku basic db is 10mil rows, $9/mo
-  ( Useful: )
+  x Separate loading from identification: load with Page#identified_at nil.  Then, identify separately.  This will also be a good refactoring for IdentifyDiscussionJob, which shouldnt have to create the discussion.  Identification can spider at-will.
   x sketch designs for the frontend
   x spike a mendeley frontend.
-  _ build more loaders... what do people use? sources feeds
-    http://www.nature.com/news/
-      e.g. http://www.nature.com/news/cancer-stem-cells-tracked-1.11087
-      refs:
-        'ol.references li a' -- maybe only first 'a' in the 'li' ?
-        'ul#article-refrences li a' (SIC)
-        'ul#article-refrences li' -- older ones may be missing link href? EG:
-          * http://www.nature.com/news/2009/090130/full/news.2009.71.html
-            "Burt, R. K. et al. Lancet Neurol. Advanced online publication doi:10.1016/S1474-4422(09)70017-1 (2009)."
-      RSS http://feeds.nature.com/NatureNewsComment
-        * links directly 
-    http://scienceblogging.org/
-      it's a network - some member blogs are better than others:
-        worthwhile:
-          * sciam - content links, content textcites
-          * discover - content links
-          * plos - content links (described more below)
-          * guardian - content links, rare
-          * wired - content links
-          * cosmos - occasional linkcites
-          * http://www.scilogs.com/ - content links
-          * scilogs.eu - content links
-        less good:
-          nature network - now scilogs
-          scienceblogs.com - rare, textcites
-          scientopia - rare, textcites Z3988
-          fieldofscience.com - rare, some links and some text, depends on the memberblog
-          labspaces - occasional linkcites
-          the gam
-        unscored:
-          freethought
-          sci3.0
-          sciblogsnz
-          central
-          aobblog
-          occam
-          scienceline
-          nature education scitable
-          allgeo
-          smithsonian
-          discovery
-          natgeo
-          agu
-          nyt
-          scimag
-          quest
-          npr-scifriday
-          sci2.0
-          psych-central
-          psy-today
-          quantum-diaries
-          animal-planet
-    via http://www.wired.com/wiredscience/2011/05/how-can-you-classify-science-bloggers/
-      * http://twistedphysics.typepad.com/cocktail_party_physics/ linkcites
-      * http://physicsbuzz.physicscentral.com/ linkcites
-    http://blogs.plos.org/
-      * good content, linkcites, sometimes going to PDFs (eg http://blogs.plos.org/speakingofmedicine/2012/08/07/do-no-harm-how-a-us-led-free-trade-agreement-threatens-the-prospects-for-an-aids-free-generation/)
-      * often linking to plos, make sure outgoing-culling doesnt strip these eg http://blogs.plos.org/everyone/2012/08/07/plos-one-news-and-media-roundup-4/
-      some plos blogs use reserachblogging like:
-        http://blogs.plos.org/obesitypanacea/2012/08/09/does-thinking-hard-impact-your-heart/
-      others don't, like:
-        http://blogs.plos.org/speakingofmedicine/2012/08/07/this-week-in-plos-medicine-competing-interests-mobile-hiv-clinic-maternal-health-more/
-    science20
-      http://www.science20.com/anthrophysis/unseen_coworkers_office_space_bacteria-92482
-        links to http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0037849
-    http://seqanswers.com
-      Literature Watch forum: http://seqanswers.com/forums/forumdisplay.php?f=10&order=desc
-      Other threads will "reference" paper(s) -- should this be displayed separately from a "discussion" in JC?
-    http://www.nasw.org/taxonomy/term/99
-      * National association of science writers, "science blogs" category
-      * http://scienceofblogging.com/what-science-blog-networks-do-you-visit-an-update/
-  _ hackernews archive loader [~] curl http://api.ihackernews.com/new/s4MVPmPI3d|jsonpp
-  _ build rss/superfeedr loaders
+  _ import upon connect with nice screen
+  _ get it deployable.
+    * heroku basic db is 10mil rows, $9/mo
   _ log all translationserver errors for categorization & improvement
-  _ scrape discussion title
+  x scrape discussion title
   x fix unicode char support in URI.parse
   _ cache name from zotero/mendeley/etc if available
   _ frontend interface
@@ -129,20 +60,23 @@ things I could do:
       _ implement
     _ sketch user flow to be prompted to add email to get notifications or to return
       _ implement
+  _ use guest user until email is captured https://github.com/plataformatec/devise/wiki/How-To%3a-Create-a-guest-user
   ( Robust: )
   _ present nice error if frontend can't contact engine
   ( Fast: )
-  _ Once spidering, reject outgoing links at:
-    * non-http/https protocols (javascript:, mailto:)
-    * same domain
-    * twitter.com
-    * facebook.com
-    * addthis.com
-    * youtube.com
-    * qualtrics.com
+  _ hackernews archive loader [~] curl http://api.ihackernews.com/new/s4MVPmPI3d|jsonpp
+  _ build rss/superfeedr loaders
+  _ move identification to background worker
+  x Once spidering, reject outgoing links at:
+    * non-http/https protocols (javascript:, mailto:) same domain twitter.com facebook.com addthis.com youtube.com wikipedia.org qualtrics.com
   _ optimize, build bulk-identifier query API?
   x multiplex the identifier worker.  Not needed: already threaded.
   ( Nifty: )
+  _ resolve discussion urls in Engine
+    e.g.:
+      Discussion on feedproxy.google.com
+      http://feedproxy.google.com/~r/openhelix/GhpE/~3/sbJsnrXgW3A/
+      Article: A Whole-Cell Computational Model Predicts Phenotype from Genotype
   _ see what else people use http://en.wikipedia.org/wiki/Comparison_of_reference_management_software
     _ import bibtex via https://rubygems.org/gems/bibtex-ruby ?
     _ spike a Papers-SDK frontend? http://www.mekentosj.com/developer
@@ -179,6 +113,82 @@ things I could do:
           # same for
           # http://arstechnica.com/science/2012/08/open-air-quantum-teleportation-performed-across-a-97km-lake/
           # discussed by http://www.reddit.com/r/science/comments/xxz59/openair_quantum_teleportation_has_been_performed/
+          http://www.sciencemag.org/content/323/5917/1077
 
-sources:
-  http://scienceblogs.com/catdynamics/2012/07/26/lhc-higgs-mass-vs-susy/
+dont know what these were about:
+  http://www.cell.com/current-biology/retrieve/pii/S0960982209006319
+  http://www.cell.com/current-biology/retrieve/pii/S0960982206016368
+  sources:
+    http://scienceblogs.com/catdynamics/2012/07/26/lhc-higgs-mass-vs-susy/
+
+names:
+  pppreview.com
+  paperquorum.com
+
+Loaders
+build more loaders... what do people use? sources feeds
+  x http://www.nature.com/news/
+      e.g. http://www.nature.com/news/cancer-stem-cells-tracked-1.11087
+      refs:
+        'ol.references li a' -- maybe only first 'a' in the 'li' ?
+        'ul#article-refrences li a' (SIC)
+        'ul#article-refrences li' -- older ones may be missing link href? EG:
+          * http://www.nature.com/news/2009/090130/full/news.2009.71.html
+            "Burt, R. K. et al. Lancet Neurol. Advanced online publication doi:10.1016/S1474-4422(09)70017-1 (2009)."
+      RSS http://feeds.nature.com/NatureNewsComment
+        * links directly 
+  _ http://scienceblogging.org/
+    it's a network - some member blogs are better than others:
+      worthwhile:
+        x sciam - content links, content textcites
+          http://blogs.scientificamerican.com/home2.php?offset_n=30 (in steps of 30, up to 6900)
+          "#singleBlogPost a"
+        x discover - content links
+        x plos - content links (described more below)
+        _ guardian - content links, rare
+        _ wired - content links
+        _ cosmos - occasional linkcites
+        _ http://www.scilogs.com/ - content links
+        _ scilogs.eu - content links
+      less good:
+        nature network - now scilogs
+        scienceblogs.com - rare, textcites
+        scientopia - rare, textcites Z3988
+        fieldofscience.com - rare, some links and some text, depends on the memberblog
+        labspaces - occasional linkcites
+        the gam
+      unscored:
+        freethought
+        sci3.0
+        sciblogsnz
+        central
+        aobblog
+        occam
+        scienceline
+        nature education scitable
+        allgeo
+        smithsonian
+        discovery
+        natgeo
+        agu
+        nyt
+        scimag
+        quest
+        npr-scifriday
+        sci2.0
+        psych-central
+        psy-today
+        quantum-diaries
+        animal-planet
+  _ via http://www.wired.com/wiredscience/2011/05/how-can-you-classify-science-bloggers/
+    * http://twistedphysics.typepad.com/cocktail_party_physics/ linkcites
+    * http://physicsbuzz.physicscentral.com/ linkcites
+  _ science20
+      http://www.science20.com/anthrophysis/unseen_coworkers_office_space_bacteria-92482
+        links to http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0037849
+  _ http://seqanswers.com
+      Literature Watch forum: http://seqanswers.com/forums/forumdisplay.php?f=10&order=desc
+      Other threads will "reference" paper(s) -- should this be displayed separately from a "discussion" in JC?
+  _ http://www.nasw.org/taxonomy/term/99
+      * National association of science writers, "science blogs" category
+      * http://scienceofblogging.com/what-science-blog-networks-do-you-visit-an-update/
