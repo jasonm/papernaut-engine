@@ -52,7 +52,7 @@ class ZoteroXulrunnerIdentificationRequest
   end
 
   def body
-    { url: @page_url, sessionid: @page_url }.to_json
+    { url: url_to_resolve, sessionid: url_to_resolve }.to_json
   end
 
   def success?
@@ -78,6 +78,17 @@ class ZoteroXulrunnerIdentificationRequest
       end
 
       nil
+    end
+  end
+
+  def url_to_resolve
+    @url_to_resolve ||= begin
+      Curl.get(@page_url) do |http|
+        # http.headers['User-Agent'] = USER_AGENT
+        http.follow_location = true
+      end.last_effective_url
+    rescue
+      @page_url
     end
   end
 end
