@@ -18,4 +18,8 @@ class Page < ActiveRecord::Base
   def self.unidentified
     where('identified_at IS NULL')
   end
+
+  def self.with_no_identifiers
+    joins("LEFT OUTER JOIN identifiers ON identifiers.page_id = pages.id").where("identifiers.page_id IS NULL")
+  end
 end
