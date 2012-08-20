@@ -1,6 +1,11 @@
 require 'feedzirra'
 
 module Loaders
+  # Usage:
+  """
+  Loaders::RedditRssLoader.new('science', 100, 100).load
+  """
+
   class RedditRssLoader
     DEFAULT_MAX_PAGES = 2
     DEFAULT_PER_PAGE = 5

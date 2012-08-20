@@ -4,8 +4,7 @@ module Loaders
 
   # Example usage:
   """
-  loader = Loaders::Plos::WebArchiveLoader.new(max_pages = 3)
-  loader.load
+  Loaders::Plos::WebArchiveLoader.new(max_pages = 250).load
   """
   module Plos
     class WebArchiveLoader

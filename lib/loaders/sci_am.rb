@@ -1,5 +1,10 @@
 module Loaders
   module SciAm
+    # Usage:
+    """
+    (0..7000).step(30).each { |offset| Loaders::SciAm::WebArchiveLoader.new(offset).load }
+    """
+
     class WebArchiveLoader
       POLITE_REQUEST_INTERVAL_SECONDS = 2
 

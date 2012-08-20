@@ -1,4 +1,8 @@
 module Loaders
+  # Usage:
+  """
+  Loaders::ResearchbloggingWebLoader.new(1301).load
+  """
   class ResearchbloggingWebLoader
     DEFAULT_MAX_PAGES = 2
     REQUEST_INTERVAL_IN_SECONDS = 2

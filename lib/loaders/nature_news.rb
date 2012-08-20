@@ -12,6 +12,13 @@ module Loaders
   #   RSS http://feeds.nature.com/NatureNewsComment
   #     * links directly 
 
+  # Usage:
+  """
+  months = %w(01 02 03 04 05 06 07 08 09 10 11 12)
+  years = %w(2009 2010 2011 2012)
+  years.each { |year| months.each { |month| Loaders::NatureNews::WebLoader.new(year, month).load } }
+  """
+
   module NatureNews
     USER_AGENT = 'JournalClub by jason.p.morrison@gmail.com'
 

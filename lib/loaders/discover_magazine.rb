@@ -5,9 +5,7 @@ module Loaders
   # Example usage:
   """
   blog_urls = Loaders::DiscoverMagazine::Index.new.blog_urls
-  blog_url = blog_urls.first
-  loader = Loaders::DiscoverMagazine::WebArchiveLoader.new(blog_url, max_pages = 3)
-  loader.load
+  blog_urls.each { |blog_url| Loaders::DiscoverMagazine::WebArchiveLoader.new(blog_url, max_pages = -1).load }
   """
   module DiscoverMagazine
     class Index
