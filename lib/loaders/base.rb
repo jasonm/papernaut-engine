@@ -29,7 +29,7 @@ module Loaders
       end
 
       def filtered_page_urls
-        Loaders::OutgoingUrlFilter.new(url, unfiltered_page_urls).filtered
+        Loaders::OutgoingUrlFilter.new(url, unfiltered_page_urls).filtered.uniq
       end
 
       def unfiltered_page_urls
