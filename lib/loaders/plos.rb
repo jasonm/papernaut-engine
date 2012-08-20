@@ -50,7 +50,9 @@ module Loaders
       end
 
       def empty?
-        if doc.text.include?(EMPTY_PAGE_MESSAGE)
+        if doc.nil?
+          true
+        elsif doc.text.include?(EMPTY_PAGE_MESSAGE)
           Loaders.logger.warn("#{self.class.name} encountered empty page at #{@url}")
           true
         end

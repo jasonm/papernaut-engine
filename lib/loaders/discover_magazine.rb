@@ -43,7 +43,8 @@ module Loaders
         page_number = @starting_page
 
         loop do
-          page_doc = Loaders.get_html(url_for_page(page_number))
+          next unless page_doc = Loaders.get_html(url_for_page(page_number))
+
           if page_doc.text.include?(EMPTY_PAGE_MESSAGE)
             Loaders.logger.warn("#{self.class.name} encountered empty page at #{url_for_page(page_number)}")
             break
