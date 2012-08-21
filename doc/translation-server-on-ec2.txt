@@ -1,0 +1,42 @@
+Running the zotero/translation-server on ec2:
+
+* Start with a lucid/ebc AMI: ami-fe5bd4ce (even works on t1.micro, although unbz2ing that 300MB package takes a few minutes)
+* Open port 1969 (AWS dashboard, Security Groups, Inbound, Port 1969, New TCP Rule)
+* Using lucid because some xulrunner-sdk prereqs are satisfied neatly by xulrunner-dev apt package, which isn't available in newer repo aka laziness.
+
+  ssh -i ~/.ec2/pk-whatever.pem ubuntu@ec2-50-112-212-250.us-west-2.compute.amazonaws.com
+
+  sudo apt-get update
+  sudo apt-get install xulrunner-dev git-core
+
+  mkdir dev ; cd dev
+
+    wget http://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/14.0.1/sdk/xulrunner-14.0.1.en-US.linux-x86_64.sdk.tar.bz2
+    tar xvf xulrunner-14.0.1.en-US.linux-x86_64.sdk.tar.bz2
+
+    git clone https://github.com/zotero/translation-server.git
+    cd translation-server
+
+      ln -s ../xulrunner-sdk
+
+      git submodule init
+      git submodule update
+      cd modules/zotero
+        git submodule init
+        git submodule update
+        cd ../..
+
+      echo "update config directory:"
+      ls -d ~/dev/translation-server/modules/zotero/translators
+      grep translation-server.translatorsDirectory config.js
+      echo "use vim or nano or whatever, but you've gotta update it ^^"
+
+      ./build.sh
+      build/run_translation-server.sh
+
+* Try a query!
+
+  curl -d '{"url":"http://www.tandfonline.com/doi/abs/10.1080/15424060903167229","sessionid":"abc123"}' \
+       --header "Content-Type: application/json" \
+       localhost:1969/web
+
