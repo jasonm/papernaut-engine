@@ -41,7 +41,8 @@ module Loaders
     end
 
     def excluded_scheme?(url)
-      %w(http https).exclude?(scheme_for(url))
+      allowed_schemes = %w(http https)
+      allowed_schemes.exclude?(scheme_for(url))
     end
 
     def domain_for(url)
