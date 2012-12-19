@@ -2,7 +2,7 @@ development:
   adapter: postgresql
   encoding: unicode
   database: journalclub_development
-  pool: 5
+  pool: 8
   username:
   password:
   host: localhost
