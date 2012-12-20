@@ -14,6 +14,8 @@ class QueryForDiscussionsTest < ActionDispatch::IntegrationTest
 
     get '/discussions.json', { query: 'the-paper' }
     assert_equal 200, status
-    assert_equal [discussion].to_json, response.body
+
+    expected_response = [discussion.as_json(methods: %w(identifier_strings))].to_json
+    assert_equal expected_response, response.body
   end
 end
