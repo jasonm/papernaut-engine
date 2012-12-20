@@ -21,7 +21,6 @@ class ZoteroXulrunnerIdentificationRequest
 
   def identifiers
     if response.response_code == 200
-      puts JSON.parse(response.body_str)
       [
         identifier_for('DOI'),
         identifier_for('url'),
@@ -29,8 +28,6 @@ class ZoteroXulrunnerIdentificationRequest
         extra_identifier_for('PMCID')
       ].compact
     elsif response.response_code == 300
-      puts "Received HTTP 300 response.  Parsed JSON body:"
-      puts JSON.parse(response.body_str)
       []
     else
       []
