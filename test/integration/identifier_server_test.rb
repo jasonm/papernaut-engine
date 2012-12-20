@@ -12,6 +12,8 @@ class IdentifierServerTest < ActionDispatch::IntegrationTest
   end
 
   test "item with multiple identifications" do
+    pending "work in progress, see 4bf5ef007516244"
+
     url = 'http://ehp03.niehs.nih.gov/article/info%3Adoi%2F10.1289%2Fehp.120-a305'
 
     expected = [
