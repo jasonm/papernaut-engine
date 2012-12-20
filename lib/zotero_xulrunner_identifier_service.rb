@@ -28,6 +28,10 @@ class ZoteroXulrunnerIdentificationRequest
         extra_identifier_for('PMCID')
       ].compact
     elsif response.response_code == 300
+      # TODO: Handle "300 Multiple Choices", see:
+      # * commit 4bf5ef007516244
+      # * commit bf206cb4383f4a40
+      # * branch handle_300
       []
     else
       []
