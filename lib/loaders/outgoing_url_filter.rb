@@ -12,8 +12,8 @@ module Loaders
     )
 
     def initialize(root_url, candidate_urls)
-      @root_url = root_url
-      @candidate_urls = candidate_urls
+      @root_url = root_url.to_s
+      @candidate_urls = candidate_urls.map(&:to_s)
     end
 
     def filtered
@@ -46,11 +46,11 @@ module Loaders
     end
 
     def domain_for(url)
-      Addressable::URI.parse(url).host
+      Addressable::URI.parse(url).try(:host)
     end
 
     def scheme_for(url)
-      Addressable::URI.parse(url).scheme
+      Addressable::URI.parse(url).try(:scheme)
     end
   end
 end
