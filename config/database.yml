@@ -1,7 +1,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: journalclub_development
+  database: papernaut_engine_development
   pool: 8
   username:
   password:
@@ -17,7 +17,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: journalclub_test
+  database: papernaut_engine_test
   pool: 5
   username:
   password:
