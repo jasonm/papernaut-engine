@@ -20,7 +20,7 @@ module Loaders
   """
 
   module NatureNews
-    USER_AGENT = 'JournalClub by jason.p.morrison@gmail.com'
+    USER_AGENT = 'Papernautapp.com by jason.p.morrison@gmail.com'
 
     class WebLoader
       POLITE_REQUEST_INTERVAL_SECONDS = 2

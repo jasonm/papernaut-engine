@@ -57,7 +57,7 @@ module Loaders
 
       # Can't use Feedzirra::Feed.fetch_and_parse directly because webmock can't fake Curb::Multi
       xml = Curl.get(url) do |http|
-        http.headers['User-Agent'] = 'JournalClub RedditRssLoader by /u/jayunit'
+        http.headers['User-Agent'] = 'Papernautapp.com RedditRssLoader by /u/jayunit'
       end.body_str
 
       Feedzirra::Feed.parse(xml)

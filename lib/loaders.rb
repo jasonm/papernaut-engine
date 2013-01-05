@@ -2,7 +2,7 @@ module Loaders
   mattr_accessor :logger
   self.logger = Rails.logger
 
-  USER_AGENT = 'JournalClub by jason.p.morrison@gmail.com'
+  USER_AGENT = 'Papernautapp.com by jason.p.morrison@gmail.com'
 
   def self.get_html(url)
     Loaders.logger.debug("Loader fetching #{url}")
