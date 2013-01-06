@@ -48,6 +48,8 @@ GEM
       loofah (~> 1.2.1)
       nokogiri (~> 1.5.3)
       sax-machine (~> 0.2.0.rc1)
+    foreman (0.60.2)
+      thor (>= 0.13.6)
     gorillib (0.1.11)
       json
     hike (1.2.1)
@@ -131,6 +133,7 @@ DEPENDENCIES
   curb (~> 0.8.1)
   factory_girl_rails
   feedzirra (= 0.2.0.rc2)
+  foreman
   m
   nokogiri (~> 1.5.5)
   pg

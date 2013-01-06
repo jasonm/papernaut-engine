@@ -14,6 +14,7 @@ gem 'threadpool'
 group 'development' do
   gem 'pry'
   gem 'pry-rails'
+  gem 'foreman'
 end
 
 group 'test' do
