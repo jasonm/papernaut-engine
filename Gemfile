@@ -4,7 +4,7 @@ gem 'rails', '3.2.10'
 gem 'pg'
 gem 'nokogiri', '~> 1.5.5'
 gem 'curb', '~> 0.8.1'
-gem 'thin'
+gem 'unicorn'
 gem 'newrelic_rpm'
 
 # just for Loaders

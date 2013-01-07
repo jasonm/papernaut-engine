@@ -59,5 +59,7 @@ module PapernautEngine
     # parameters by using an attr_accessible or attr_protected declaration.
     config.active_record.whitelist_attributes = true
 
+    # http://blog.codeship.io/2012/05/06/Unicorn-on-Heroku.html
+    config.logger = Logger.new(STDOUT)
   end
 end
