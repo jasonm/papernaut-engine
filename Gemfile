@@ -5,6 +5,7 @@ gem 'pg'
 gem 'nokogiri', '~> 1.5.5'
 gem 'curb', '~> 0.8.1'
 gem 'thin'
+gem 'newrelic_rpm'
 
 # just for Loaders
 gem 'feedzirra', '0.2.0.rc2'
