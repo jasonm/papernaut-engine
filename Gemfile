@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.10'
+gem 'rails', '3.2.11'
 gem 'pg'
 gem 'nokogiri', '~> 1.5.5'
 gem 'curb', '~> 0.8.1'
